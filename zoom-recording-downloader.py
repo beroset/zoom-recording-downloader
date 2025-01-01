@@ -232,6 +232,22 @@ def list_recordings(email):
 
     return recordings
 
+def get_file_length(file_path):
+    """
+    Gets the length of a file in bytes.
+
+    Args:
+        file_path: The path to the file.
+
+    Returns:
+        The length of the file in bytes, or 0 if the file does not exist.
+    """
+    try:
+        file_size = os.path.getsize(file_path)
+        return file_size
+    except FileNotFoundError:
+        return 0
+
 
 def download_recording(download_url, email, filename, folder_name, file_size):
     dl_dir = os.sep.join([DOWNLOAD_DIRECTORY, folder_name])
@@ -240,7 +256,7 @@ def download_recording(download_url, email, filename, folder_name, file_size):
     full_filename = os.sep.join([sanitized_download_dir, sanitized_filename])
 
     os.makedirs(sanitized_download_dir, exist_ok=True)
-    if (file_size == os.path.getsize(full_filename)):
+    if (file_size == get_file_length(full_filename)):
         print(f"==> Skipping {filename} - already downloaded")
         return True
     else:
